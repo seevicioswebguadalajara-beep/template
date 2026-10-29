@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Para ti</title>
 <style>
 :root{
@@ -19,6 +19,7 @@ body{
   background:radial-gradient(120% 90% at 50% 0%,var(--bg2),var(--bg) 70%);
   font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;color:var(--ink);
   overflow-x:hidden;
+  padding-top:calc(24px + env(safe-area-inset-top,0px));padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));
 }
 .dedic{
   text-align:center;color:var(--glass-ink);
@@ -56,6 +57,11 @@ body{
 .locked .needle{box-shadow:0 0 18px 3px var(--accent)}
 .song{margin-top:12px;font-size:14px;display:flex;justify-content:space-between;gap:10px;opacity:.9}
 .song b{font-weight:600}
+.song .real{display:none}
+.found .song .unk{display:none}
+.found .song .real{display:inline;animation:reveal 1.2s ease-out both}
+.unk{opacity:.5;font-style:italic}
+@keyframes reveal{from{opacity:0;transform:translateY(6px);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
 .bar{height:3px;background:rgba(243,230,223,.2);border-radius:2px;margin-top:8px;overflow:hidden}
 .bar i{display:block;height:100%;width:0;background:var(--accent)}
 
@@ -116,7 +122,7 @@ body{
         <div class="status" id="status">Buscando señal…</div>
       </div>
       <div class="scale" id="scale"><div class="needle" id="needle"></div></div>
-      <div class="song"><span><b>Estar Contigo</b></span><span>Alex, Jorge y Lena</span></div>
+      <div class="song"><span class="unk">Señal desconocida…</span><span class="real"><b>Estar Contigo</b></span><span class="real">Alex, Jorge y Lena</span></div>
       <div class="bar"><i id="prog"></i></div>
     </div>
 
@@ -186,6 +192,7 @@ body{
     knob.setAttribute('aria-valuenow',freq.toFixed(1));
     var locked=dist()<=LOCK;
     app.classList.toggle('locked',locked);
+    if(locked) app.classList.add('found');
     if(!audio.paused||locked) hint.textContent=locked?'♥':'Gira la perilla para sintonizar';
     elStatus.textContent=locked?'Sintonizado ♥':(dist()<2?'Casi…':'Buscando señal…');
     var d=dist();
